@@ -1,0 +1,318 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Board {
+	
+	/*****************************
+	 * 		Variables
+	 ****************************/
+	private Domain[] rows = new Domain[9];
+	private Domain[] columns = new Domain[9];
+	private Domain[] box = new Domain[9];
+	
+	/*******************************************
+	 * 	initializeRows
+	 * 		This method is used to initialize 
+	 * 		the board's rows, and keep track
+	 * 		of what numbers already exist 
+	 * 		in the row.
+	 * 
+	 *******************************************/
+	public void initializeRows()
+	{
+		String[] stringRow = Arrays.copyOf(GetSudokuBoard.getRows(), GetSudokuBoard.getRows().length);
+		int[] arr = new int[9];
+		
+		for(int i = 0; i < 9; i++){
+			for(int j = 0; j < 9; j++){
+				arr[j] = Character.getNumericValue(stringRow[i].charAt(j));
+			}
+			rows[i] = new Domain();
+			rows[i].initializeDomain(arr);
+		}
+		
+		/*for(int i = 0; i < stringRow.length; i++){		//print statement to check if stringRow properly takes in the values
+			System.out.println(stringRow[i]);				//to make this work, comment out the for loop that already exists
+		}*/	
+	}
+	
+	/*******************************************
+	 * 	initializeColumns
+	 * 		This method is used to initialize 
+	 * 		the board's columns, and keep track
+	 * 		of what numbers already exist
+	 * 		in the column.
+	 * 
+	 * 		This method creates 9 arrays to 
+	 * 		temporarily store the elements
+	 * 		in an order such that the elements
+	 * 		are ordered by columns while looping
+	 * 		through the entire board array.
+	 * 
+	 *******************************************/
+	public void initializeColumns()
+	{
+		int[] wholeBoard = Arrays.copyOf(GetSudokuBoard.getBoard(), GetSudokuBoard.getBoard().length);
+			//creating 9 separate arrays for the columns
+		int[] arr0 = new int[9]; int count0 = 0;
+		int[] arr1 = new int[9]; int count1 = 0;
+		int[] arr2 = new int[9]; int count2 = 0;
+		int[] arr3 = new int[9]; int count3 = 0;
+		int[] arr4 = new int[9]; int count4 = 0;
+		int[] arr5 = new int[9]; int count5 = 0;
+		int[] arr6 = new int[9]; int count6 = 0;
+		int[] arr7 = new int[9]; int count7 = 0;
+		int[] arr8 = new int[9]; int count8 = 0;
+		
+		
+		for(int i = 0; i <81; i++){							//Looping through the whole board and putting all the
+			switch(i%9){									//elements in their proper array so that they will be
+			case 0:											//organized by columns
+				arr0[count0] = wholeBoard[i];
+				count0++;
+				break;
+			case 1:
+				arr1[count1] = wholeBoard[i];
+				count1++;
+				break;
+			case 2:
+				arr2[count2] = wholeBoard[i];
+				count2++;
+				break;
+			case 3:
+				arr3[count3] = wholeBoard[i];
+				count3++;
+				break;
+			case 4:
+				arr4[count4] = wholeBoard[i];
+				count4++;
+				break;
+			case 5:
+				arr5[count5] = wholeBoard[i];
+				count5++;
+				break;
+			case 6:
+				arr6[count6] = wholeBoard[i];
+				count6++;
+				break;
+			case 7:
+				arr7[count7] = wholeBoard[i];
+				count7++;
+				break;
+			case 8:
+				arr8[count8] = wholeBoard[i];
+				count8++;
+				break;
+			default:
+				System.out.println("Error. Not valid case.");
+					
+			}
+		}
+		
+		for(int i = 0; i < 9; i++){				
+			columns[i] = new Domain();				//initializing domain object
+		}
+		
+		columns[0].initializeDomain(arr0);			//initializing the domains of the object with 
+		columns[1].initializeDomain(arr1);			//the arrays created from the for loops above
+		columns[2].initializeDomain(arr2);
+		columns[3].initializeDomain(arr3);
+		columns[4].initializeDomain(arr4);
+		columns[5].initializeDomain(arr5);
+		columns[6].initializeDomain(arr6);
+		columns[7].initializeDomain(arr7);
+		columns[8].initializeDomain(arr8);
+	}
+	
+	/*******************************************
+	 * 	initializeBox
+	 * 		This method is used to initialize 
+	 * 		the board's boxes, and keep track
+	 * 		of what numbers already exist in 
+	 * 		the box.
+	 * 
+	 * 		Boxes are numbered as shown below.
+	 * 		These numbers are the same as 
+	 * 		array indeces.
+	 * 
+	 * 		0 | 1 | 2
+	 * 		3 | 4 | 5
+	 * 		6 | 7 | 8
+	 * 
+	 *******************************************/
+	public void initializeBox(){
+		int[] arr0 = new int[9]; int count0 = 0;	//creates three arrays and three count variables
+		int[] arr1 = new int[9]; int count1 = 0;
+		int[] arr2 = new int[9]; int count2 = 0;
+		
+		for(int i = 0; i < 9; i++)			//initializes the domains in the box array
+			box[i] = new Domain();
+		
+		for(int i = 0; i<3; i++){						
+			for(int j = 0; j<3; j++){					//preparing the first box
+				arr0[count0] = rows[i].domain[j];		//looping through only the first three elements
+				count0++;								
+			}
+			for(int j = 3; j<6; j++){					//preparing the second box
+				arr1[count1] = rows[i].domain[j];		//looping through the next three elements after the first
+				count1++;
+			}
+			for(int j = 6; j<9; j++){					//preparing the third box
+				arr2[count2] = rows[i].domain[j];		//looping through the next three elements after the previous
+				count2++;
+			}
+		}
+		
+		box[0].initializeDomain(arr0); count0 = 0;		//initializing the domain of the first 3 boxes
+		box[1].initializeDomain(arr1); count1 = 0;		//resetting counters
+		box[2].initializeDomain(arr2); count2 = 0;
+		
+		for(int i = 3; i<6; i++){ 					//going through the second row of boxes
+			for(int j = 0; j<3; j++){					//with the same format as the previous 3 boxes
+				arr0[count0] = rows[i].domain[j];
+				count0++;
+			}
+			for(int j = 3; j<6; j++){
+				arr1[count1] = rows[i].domain[j];
+				count1++;
+			}
+			for(int j = 6; j<9; j++){
+				arr2[count2] = rows[i].domain[j];
+				count2++;
+			}
+		}
+		
+		box[3].initializeDomain(arr0); count0 = 0;		//initializing domain of middle three boxes
+		box[4].initializeDomain(arr1); count1 = 0;		//resetting counters
+		box[5].initializeDomain(arr2); count2 = 0;
+		
+		for(int i = 6; i<9; i++){					//going through the last row of boxes
+			for(int j = 0; j<3; j++){					//with the same format as the previous 3 boxes
+				arr0[count0] = rows[i].domain[j];
+				count0++;
+			}
+			for(int j = 3; j<6; j++){
+				arr1[count1] = rows[i].domain[j];
+				count1++;
+			}
+			for(int j = 6; j<9; j++){
+				arr2[count2] = rows[i].domain[j];
+				count2++;
+			}
+		}
+		
+		box[6].initializeDomain(arr0); 				//initializing domain of last three boxes
+		box[7].initializeDomain(arr1); 
+		box[8].initializeDomain(arr2); 
+	}
+	
+	/*******************************************
+	 * 	initializeBoard
+	 * 		This method is used to initialize 
+	 * 		the board's rows, columns, and boxes
+	 * 		all in one place.
+	 * 
+	 *******************************************/
+	public void initializeBoard()
+	{
+		initializeRows();
+		initializeColumns();
+		initializeBox();
+	}
+	
+	/*******************************************
+	 * 	Domain Class
+	 * 		This class is used to keep track 
+	 * 		of the board's rows, columns, and
+	 * 		boxes
+	 * 
+	 *******************************************/
+	public class Domain{
+
+		/*****************************
+		 * 		Variables
+		 ****************************/
+		private Boolean[] existsInDomain = {false, false, false, false, false, false, false, false, false}; 
+				//existsInDomain keeps track of what numbers already exist in the domain. The wanted number is calculated by number - 1
+		private int[] domain = {0,0,0,0,0,0,0,0,0};
+				//domain is the list of numbers that exist in the row/column/box
+		
+		
+		/*******************************************
+		 * 	initializeDomain
+		 * 		This method initializes	the domains 
+		 * 		inside the Domain class
+		 * 
+		 *******************************************/
+		public void initializeDomain(int[] arr){
+			for(int i = 0; i < 9; i++){
+				domain[i] = arr[i];
+				if(arr[i] != 0)								// This if statement checks to see if a number already exists in the domain
+					existsInDomain[arr[i]-1] = true;		// and sets the number to be true
+			}
+		}
+		
+		public void setRowElement(int element, int index){
+			domain[index] = element;
+			existsInDomain[element] = true;
+		}
+		
+		public void setTrue(int index){
+			existsInDomain[index] = true; 
+		}
+		
+		public void setFalse(int index){
+			existsInDomain[index] = false;
+		}
+		
+		public int[] getRow(){
+			return domain;
+		}
+		
+		public Boolean[] getRowBoolean(){
+			return existsInDomain;
+		}
+		
+		public void printDomain(){
+			for(int i = 0; i < 9; i++){
+				if(i == 8)
+					System.out.println(domain[i]);
+				else
+					System.out.print(domain[i]);
+			}
+		}
+	}
+	
+/*	public static void main(String[] args){
+		GetSudokuBoard boardInitializer = new GetSudokuBoard();
+		boardInitializer.initializeBoard();
+		
+		Board object = new Board();
+		object.initializeRows();
+		//object.checkRow();
+		object.initializeColumns();
+		//object.checkColumns();
+		object.initializeBox();
+		//object.checkBoxes();
+	}
+*/
+	
+	// below are test methods to check for values being properly copied
+	public void checkRow(){
+		for(int i = 0; i < 9; i++){
+			rows[i].printDomain();
+		}
+	}
+	
+	public void checkColumns(){
+		for(int i = 0; i < 9; i++){
+			columns[i].printDomain();
+		}
+	}
+	
+	public void checkBoxes(){
+		for(int i = 0; i < 9; i++){
+			box[i].printDomain();
+		}
+	}
+}
