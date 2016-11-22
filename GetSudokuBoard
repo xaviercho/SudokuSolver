@@ -1,0 +1,60 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class GetSudokuBoard {
+	/*****************************
+	 * 		Variables
+	 ****************************/
+	String inFileName = "C:/Users/SweetHotChocolate/workspace/SudokuSolver/src/EasyPuzzle1.txt";  //DON'T FORGET TO CHANGE THIS DEPENDING ON WHAT YOU WANT TO TEST
+	Scanner inFile = null;
+	public static int[] board = new int[81];
+	public static String[] rows = new String[9];
+	
+	public void findFile(){
+		try{
+			inFile = new Scanner(new File(inFileName));
+			//System.out.println("File " + inFileName + " found.");		// print test to see if it works
+		}
+		catch(FileNotFoundException e){
+			System.out.println("File " + inFileName + " not found.");
+		}
+	}
+	
+	public void initializeBoard(){
+		int i = 0;
+		int count = 0;
+		findFile();
+		while(inFile.hasNext()){
+			String line = inFile.nextLine();
+			rows[i] = line;
+			//System.out.println(rows[i]);		// print test to see if it works
+			i++;
+		}
+		
+		for(i = 0; i < 9; i++){
+			for(int j = 0; j <9; j++){
+				board[count] = Character.getNumericValue(rows[i].charAt(j));
+				
+				/*if((count+1)%9 == 0)							// print test to see if it works
+					System.out.println(board[count]);
+				else
+					System.out.print(board[count]);*/
+				count++;
+			}
+		}
+	}
+	
+	public static int[] getBoard(){
+		return board;
+	}
+	
+	public static String[] getRows(){
+		return rows;
+	}
+	
+	//main test for deubgging and testing purposes
+	/*public static void main(String[] args){
+		GetSudokuBoard object = new GetSudokuBoard();
+		object.initializeBoard();
+	}*/
+}
