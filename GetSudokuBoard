@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class GetSudokuBoard {
-	/*****************************
+	/***************************** hi shanan! :3
 	 * 		Variables
 	 ****************************/
 	String inFileName = "C:/Users/SweetHotChocolate/workspace/SudokuSolver/src/EasyPuzzle1.txt";  //DON'T FORGET TO CHANGE THIS DEPENDING ON WHAT YOU WANT TO TEST
